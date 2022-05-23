@@ -1,0 +1,123 @@
+@import url('fonts/Poppins-Regular.ttf');
+@import url('fonts/Poppins-Light.ttf');
+@import url('fonts/Poppins-Bold.ttf');
+@font-face {
+    font-family: 'Poppins-Regular';
+    src: url('fonts/Poppins-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins-Light';
+    src: url('fonts/Poppins-Light.ttf');
+}
+
+@font-face {
+    font-family: 'Poppins-Bold';
+    src: url('fonts/Poppins-Bold.ttf');
+}
+
+body {
+    font-family: 'Poppins-Regular', sans-serif;
+}
+
+.navbar-light {
+    font-family: 'Poppins-Regular', sans-serif;
+}
+
+.welcome-title {
+    font-family: 'Poppins-Light', sans-serif;
+}
+
+
+/* ============ desktop view ============ */
+
+.add-padding {
+    padding: .25rem 1.1rem !important;
+}
+
+.drop-down02 {
+    position: relative;
+}
+
+.drop-down02 .sub-menu02 {
+    position: absolute !important;
+    left: 100%;
+    top: 0;
+}
+
+.drop-down02 .dropdown-toggle {
+    padding: .20rem 1.1rem !important;
+}
+
+@media screen and (max-width :767px) {
+    .drop-down02 .sub-menu02 {
+        position: static !important;
+    }
+}
+
+
+/* ============ desktop view .end// ============ */
+
+
+/* ============ small devices ============ */
+
+@media (max-width: 991px) {
+    .dropdown-menu .dropdown-menu {
+        margin-left: 0.7rem;
+        margin-right: 0.7rem;
+        margin-bottom: .5rem;
+    }
+}
+
+
+/* ============ small devices .end// ============ */
+
+
+/* body { */
+
+
+/* background-color: #eee; */
+
+
+/* font-family: "Poppins", sans-serif;
+font-weight: 300 */
+
+
+/* } */
+
+.height {
+    height: 65vh
+}
+
+.search {
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1)
+}
+
+.search input {
+    height: 60px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4
+}
+
+.search input:focus {
+    box-shadow: none;
+    border: 2px solid #088441
+}
+
+.search .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 16px
+}
+
+.search button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 50px;
+    width: 110px;
+    background: #088441
+}
