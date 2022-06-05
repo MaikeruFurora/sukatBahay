@@ -110,7 +110,7 @@
        })
 
        $(document).on('click','button[name="btnEdit"]',function(){
-        $("#ruleModalTitle").text('Edit Medicine')
+        $("#ruleModalTitle").text('Edit Rule')
         $("#ruleForm button[type='submit']").text("Update");
         let updateId = $(this).val();
         $.ajax({

@@ -38,16 +38,19 @@ body {
 }
 
 .drop-down02 {
+    color: black;
     position: relative;
 }
 
 .drop-down02 .sub-menu02 {
+    color: black;
     position: absolute !important;
     left: 100%;
     top: 0;
 }
 
 .drop-down02 .dropdown-toggle {
+    color: black;
     padding: .20rem 1.1rem !important;
 }
 

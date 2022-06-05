@@ -15,6 +15,10 @@ class CreateExercisesTable extends Migration
     {
         Schema::create('exercises', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('rule_id')->nullable();
+            $table->foreign('rule_id')->references('id')->on('rules');
+            $table->json('answers');
+            $table->text('question');
             $table->timestamps();
         });
     }

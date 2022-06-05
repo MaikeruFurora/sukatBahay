@@ -1,10 +1,10 @@
 @extends('layout.adminLayout.app')
 @section('title','Content | Management')
 @section('moreCss')
-        <!-- DataTables -->
         <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/summernote/summernote-bs4.css') }}">
 @endsection
 @section('content')
+@include('administrator.section_content.modalForm')
 <section class="section">
     <div class="section-body">
         <h2 class="section-title">Content</h2>
@@ -16,93 +16,24 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ $data->section_title }}</h4>
+                        <form class="card-header-form mr-3">
+                          <select id="my-select" class="custom-select" name="select_year">
+                            <option value="">None</option>
+                            @foreach ($year as $item)
+                            <option value="{{ $item->id }}">{{ $item->year }}</option>
+                            @endforeach
+                          </select>
+                        </form>
                         <div class="card-header-action">
+                              
                             <a class="btn btn-dark" href="{{ route('admin.section',$data->rule_id) }}" style="font-size: 14px;color:white"> Back</a>
-                            <a class="btn btn-primary" href="{{ route('admin.content.create',$data->id) }}" style="font-size: 14px;color:white"> Create Content</a>
+                            {{-- <a class="btn btn-primary" href="{{ route('admin.content.create',$data->id) }}" style="font-size: 14px;color:white"> Create Content</a> --}}
+                            <button class="btn btn-primary" name="btnCreate" style="font-size: 14px;color:white"> Create Content</button>
                           </div>
+                          
                     </div>
                     <div class="card-body">
-                       
-
-                        <ul class="list-unstyled">
-                            <li class="media">
-                                <ul class="list-unstyled">
-                                    <li class="media">
-                                      <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                      </div>
-                                    </li>
-                                    <li class="media my-4">
-                                      <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                      </div>
-                                    </li>
-                                    <li class="media">
-                                      <div class="media-body">
-                                        <h5 class="mt-0 mb-1">List-based media object</h5>
-                                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                                      </div>
-                                    </li>
-                                  </ul>
-                            </li>
-                            <li class="media my-4">
-                              <div class="media-body">
-                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                              </div>
-                            </li>
-                            <li class="media">
-                              <div class="media-body">
-                                <h5 class="mt-0 mb-1">List-based media object</h5>
-                                Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                              </div>
-                            </li>
-                          </ul>
-
-                       {{-- <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
-                           <thead>
-                            <tr class="text-center ">
-                                <th width="60%">Context</th>
-                                <th width="10%" class="text-center">Comparison</th>
-                                <th width="30%">Action</th>
-                            </tr>
-                           </thead>
-                           <tbody id="content">
-                            @forelse ($data['contents'] as $item)
-                            <tr>
-                                    <td>
-                                        @php
-                                            echo html_entity_decode($item->content);
-                                        @endphp
-                                        <div class="btn-group" role="group" aria-label="Button group">
-                                            <button class="btn btn-sm btn-primary"><i class="fas fa"></i> Comparison</button>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">
-                                        @php
-                                            echo html_entity_decode($item->comparison);
-                                        @endphp
-                                    </td>
-                                    <td class="text-center">
-                                        <a class="btn btn-warning btn-sm pl-3 pr-3" href="{{ route('admin.content.edit',$item->id) }}">Edit</a>
-                                        <button class="btn btn-danger btn-sm pl-2 pr-2"  onclick="event.preventDefault(); document.getElementById('delete-form').submit();">Delete</button>
-                                        <form action="{{ route('admin.content.delete',$item->id) }}" method="POST" id="delete-form" class="d-none">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
-                                    </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="3" class="text-center">No data here.</td>
-                            </tr>
-                            @endforelse
-                           </tbody>
-                        </table>
-                       </div> --}}
+                      <div class="media-content"></div>
                     </div>
                 </div>
             </div>
@@ -115,24 +46,76 @@
 @section('moreJs')
    <script src="{{ asset('adminstyle/assets/modules/summernote/summernote-bs4.js') }}"></script>
     <script>
-        // "use strict"
+        "use strict"
+        $('.summernote').summernote({
+          height: 100,
+            callbacks: {
+                onPaste: function (e) {
+                    var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
 
-        // $('.summernote').summernote({
-        //     //placeholder: 'write here...',
-        //     spellCheck: true,
-        //     dialogsInBody: true,
-        //     minHeight: 150,
-        // });
- 
-        // $('.nav-tabs a[href="#home-tab2"]').on('click',function(){
-        //     $('.nav-tabs a[href="#home"]').tab('show');
-        // })
+                    e.preventDefault();
 
-        // $('.nav-tabs a[href="#profile-tab2"]').on('click',function(){
-        //     $('.nav-tabs a[href="#profile2"]').tab('show');
-        // })
+                    // Firefox fix
+                    setTimeout(function () {
+                        document.execCommand('insertText', false, bufferText);
+                    }, 10);
+                }
+            }
+        });
+        
+        let selectedTag = $('select[name="select_year"] option');
+        const clearForm = () =>{
+          $("#contentForm")[0].reset()
+          $('.summernote').summernote('reset')
+          $('#contentForm input[name="id"]').val('');
+          $('#contentForm input[name="sub_content_id"]').val('');
+          // $("select[name='revise_year_id'] option[value="+ selectedTag.filter(":selected").val() +"]").attr("selected", true);
+        }
+       $(document).on('click','button[name="btnCreate"]',function(){
+          $("#contentForm button[type='submit']").text("Create")
+          $("#contentModalTitle").text("Create Content");
+          clearForm()
+          $("#contentModal").modal("show")
+       })
+   
+        $('#contentForm').on('submit',function(e){
+          
+            e.preventDefault()
+             let cleanText =$($(".summernote").summernote("code")).text()
+            $('textarea[name="content_text"]').val(cleanText)
+            $.ajax({
+                url:'store',
+                type:'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend: function(){
+                    $("#contentForm button[type='submit']").html(` 
+                    Saving... <div class="spinner-border spinner-border-sm" role="status"> <span class="sr-only">Loading...</span> </div>
+                    `).attr("disabled", true);
+                }
+           }) .done(function (data) {
+              
+                getToast("success", `<i class="fas fa-book-reader"></i>`,"Successfully saved");
+                $("#contentForm button[type='submit']").text("Create").attr("disabled", false); 
+                let ifId = $('#contentForm input[name="id"]').val();
+                if (ifId=='') {
+                  $("#contentModal").modal("show")
+                }else{
+                  $("#contentModal").modal("hide")
+                }
 
-  
+                $("#contentModal").modal("hide")
+               clearForm()
+               content(selectedTag.filter(":selected").val())
+            })
+            .fail(function (jqxHR, textStatus, errorThrown) {
+                getToast("error", "Eror", errorThrown);
+                $("#contentForm button[type='submit']").text("Create").attr("disabled", false);
+            });
+       })
+
      
         /**
          *
@@ -140,107 +123,172 @@
          *
          **/
 
-    //     const sectionId = `<?=$data->id?>`;
+        const sectionId = `<?=$data->id?>`;
 
-    //     $('#contentForm').on('submit',function(e){
-    //         e.preventDefault()
-    //         $.ajax({
-    //             url:'store',
-    //             type:'POST',
-    //             data: new FormData(this),
-    //             processData: false,
-    //             contentType: false,
-    //             cache: false,
-    //             beforeSend: function(){
-    //                 $("#contentForm button[type='submit']").html(` 
-    //                 Saving... <div class="spinner-border spinner-border-sm" role="status"> <span class="sr-only">Loading...</span> </div>
-    //                 `).attr("disabled", true);
-    //             }
-    //        }) .done(function (data) {
-    //             getToast("success", `<i class="fas fa-book-reader"></i>`,"Successfully saved");
-    //             $("#contentForm button[type='submit']").text("Create").attr("disabled", false);
-    //             $("#contentForm")[0].reset()
-    //             myContent(sectionId)
-    //             $('#summernote1').summernote('reset')
-    //             $('#summernote2').summernote('reset')
-    //             $('#summernote3').summernote('reset')
-    //             $("#showCancel").html('')
-    //         })
-    //         .fail(function (jqxHR, textStatus, errorThrown) {
-    //             getToast("error", "Eror", errorThrown);
-    //             $("#contentForm button[type='submit']").text("Create").attr("disabled", false);
-    //         });
-    //    })
-    //    myContent(sectionId)
-
-    //    $(document).on('click','button[name="btnEdit"]',function(){
-    //     $("#contentForm button[type='submit']").text("Update");
-    //     $.ajax({
-    //             url:`edit/${$(this).val()}`,
-    //             type:'GET'
-    //         }).done(function(data){
-    //             console.log(data);
-    //             $('#contentForm input[name="id"]').val(data.id)
-    //             $("#sectionModal").modal("show")
-    //             if (data.comparison_one!='') {
-                    
-    //                 $('#summernote1').summernote('code',data.comparison_one)
-    //             }
-    //             if (data.comparison_two!='') {
-    //                 $('#summernote2').summernote('code',data.comparison_two)
-    //             }
-    //             if (data.comparison_none!='') {
-                    
-    //                 $('#summernote3').summernote('code',data.comparison_none)
-    //             }
-
-    //             if (data.comparison_none=='' || data.comparison_none==null) {
-    //                 $('.nav-tabs a[href="#home2"]').tab('show');
-    //             } else {
-    //                 $('.nav-tabs a[href="#profile2"]').tab('show');
-    //             }
-
-    //             // $('#summernote1').summernote('destroy')
-    //             // $('#summernote2').summernote('destroy')
-    //             // $('#summernote3').summernote('destroy')
-                
-
-    //             $("#showCancel").html(
-    //                 `<button class="btn btn-secondary mt-2" name="btnCancel">Cancel</button>`
-    //             )
-    //         }) .fail(function (jqxHR, textStatus, errorThrown) {
-    //             getToast("error", "Eror", errorThrown);
-    //             $("#contentForm button[type='submit']").text("Update").attr("disabled", false);
-    //         });
-    //    })
-
-    //    $(document).on('click','button[name="btnCancel"]',function(){
-    //     $('#summernote1').summernote('reset')
-    //     $('#summernote2').summernote('reset')
-    //     $('#summernote3').summernote('reset')
-    //     $("#contentForm button[type='submit']").text("Create")
-    //     $("#showCancel").html('')
-    //    })
-
-    //    $(document).on('click','button[name="delete"]',function(){
-    //     $.ajax({
-    //     url: `delete/${$(this).val()}`,
-    //     type: "DELETE",
-    //     data: { _token: $('input[name="_token"]').val() },
-    //     // beforeSend: function () {
-    //     //     $(".deleteYes").html(`
-    //     //     <div class="spinner-border spinner-border-sm" role="status">
-    //     //         <span class="sr-only">Loading...</span>
-    //     //     </div>`).attr('disabled',true);
-    //     // },
-    // })
-    //     .done(function (response) {
-    //         myContent(sectionId)
-    //     })
-    //     .fail(function (jqxHR, textStatus, errorThrown) {
-    //         getToast("error", "Eror", errorThrown);
-    //     });
+ 
+       $(document).on('click','button[name="btnEdit"]',function(){
+        $("#contentForm button[type='submit']").text("Update");
+        $.ajax({
+                url:`edit/${$(this).val()}`,
+                type:'GET'
+            }).done(function(data){
+                clearForm()
+                $('#contentForm input[name="id"]').val(data.id)
+                $('#contentForm input[name="sub_content_id"]').val(data.sub_content_id)
+                $("#contentModal").modal("show")
+                $('.summernote').summernote('code',data.content)
+                console.log(selectedTag.filter(":selected").val());
+                $("select[name='revise_year_id'] option[value="+ (data.revise_year.id!='')?data.revise_year.id : '' +"]").attr("selected", true); 
+            }) .fail(function (jqxHR, textStatus, errorThrown) {
+                getToast("error", "Eror", errorThrown);
+                $("#contentForm button[type='submit']").text("Update").attr("disabled", false);
+            });
        })
+
+
+    const content = (yearSelected) =>{
+      let _content = ``;
+      let _subcontent = ``;
+      $.ajax({
+        url: `list/${sectionId}/${yearSelected}`,
+        type: "GET",
+        data: { _token: $('input[name="_token"]').val() },
+        beforeSend: function(){
+            $(".media-content").html(` 
+            Loading...`);
+        }
+       })
+        .done(function (response) {
+          if (response.contents.length>0) {   
+            response.contents.forEach((element) => {
+                _content+=`
+                <div class="media">
+                <div class="media-body">
+                  <p> ${ element.content }
+                    ${buttongroup(element.id,element.sub_content)}
+                    </p>
+                    ${subcontent(element.sub_content)}
+                    </div>
+                    </div>`//hold
+                    // <small>Year: ${ element.revise_year.year }</small><br/><br/>
+            });
+          }else{
+            _content=`<small class="text-center">No data available</small>`
+          }
+          $(".media-content").html(_content);
+        })
+        .fail(function (jqxHR, textStatus, errorThrown) {
+            getToast("error", "Eror", errorThrown);
+        });
+    }
+
+
+    const subcontent = (value) =>{
+      let _subcontent='';
+      if (value!=undefined) {
+        if (parseInt(value.length)>0) {
+        value.map(elem=>{
+          _subcontent+=`
+              <div class="media">
+                <span class="pr-5"></span>
+                <div class="media-body">
+                  <p class="mb-0">${ elem.content }
+                    ${buttongroup(elem.id,elem.sub_content)}  
+                  </p>
+                   ${subcontent(elem.sub_content)}
+                </div>
+              </div>`
+            });
+        }
+      }
+
+      return _subcontent;
+    }
+
+
+   
+
+    const buttongroup = (id,obj) =>{
+      let buttongrouphtml=``;
+      buttongrouphtml+= `<div class="btn-group" role="group" aria-label="Basic example">`
+       
+      if (obj!=undefined) {
+       
+            buttongrouphtml+= `<button 
+                       name="btnSubContent"
+                         value="${id}"
+                         type="button"
+                         class="btn btn-default btn-sm pt-0 pb-0"
+                         style="font-size:10px"
+                 >
+                 <i class="fas fa-code-branch"></i> Sub content</button>`
+           
+      }
+              
+      buttongrouphtml+= `<button 
+                        value="${id}"
+                        name="btnEdit"
+                        type="button" 
+                        class="btn btn-default btn-sm pt-0 pb-0"
+                        style="font-size:10px"
+                >
+                <i class="fa fa-edit"></i> Edit</button>
+                <button 
+                        name="btnDelete"
+                        value="${id}"
+                        type="button"
+                        class="btn btn-default btn-sm pt-0 pb-0 btn_${id}"
+                        style="font-size:10px"
+                >
+                <i class="fa fa-trash"></i> Delete</button>
+              </div>`;
+
+          return buttongrouphtml
+    }
+
+    $(document).on('click','button[name="btnDelete"]',function(){
+      let deletedID = $(this).val();
+      if (confirm("Are you sure?")) {
+        $.ajax({
+        url: `delete/${deletedID}`,
+        type: "DELETE",
+        data: { _token: $('input[name="_token"]').val() },
+        beforeSend: function(){
+            $('btn_'+deletedID).html(` 
+            <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+            `).attr("disabled", true);
+        }
+       })
+        .done(function (response) {
+          $('btn_'+deletedID).html(`<i class="fa fa-trash"></i> Delete`).attr('disabled',false)
+          getToast("success", "Success", "Data has been successfully deleted!");
+          content(selectedTag.filter(":selected").val())
+        })
+        .fail(function (jqxHR, textStatus, errorThrown) {
+           $('btn_'+deletedID).html(`<i class="fa fa-trash"></i> Delete`).attr('disabled',false)
+            getToast("error", "Eror", errorThrown);
+        });
+      }
+
+      return false;
+    })
+
+    $(document).on('click','button[name="btnSubContent"]',function(){
+          $("#contentForm button[type='submit']").text("Create")
+          $("#contentModalTitle").text("Create Sub Content");
+          clearForm()
+          $('#contentForm input[name="sub_content_id"]').val($(this).val());
+          $("#contentModal").modal("show")
+    })
+
+    $('select[name="select_year"]').on('change',function(){
+      content($(this).val())
+    })
+
+
+    content(selectedTag.filter(":selected").val())
 
     </script>
 @endsection

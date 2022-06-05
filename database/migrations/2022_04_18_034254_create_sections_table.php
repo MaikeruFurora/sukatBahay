@@ -18,6 +18,7 @@ class CreateSectionsTable extends Migration
             $table->unsignedBigInteger('rule_id')->nullable();
             $table->foreign('rule_id')->references('id')->on('rules');
             $table->string('section_no');
+            $table->text('slug')->nullable();
             $table->text('section_title');
             $table->timestamps();
         });

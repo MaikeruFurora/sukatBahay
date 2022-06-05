@@ -13,7 +13,12 @@ class ReviseYear extends Model
 
     public function scopeStore($query){
         return $query->updateorcreate(['id'=>request('id')],[
-            'year'=>request('year')
+            'year'=>request('year'),
+            'description'=>request('description')
         ]);
+    }
+
+    public function content(){
+        return $this->hasMany(Content::class);
     }
 }

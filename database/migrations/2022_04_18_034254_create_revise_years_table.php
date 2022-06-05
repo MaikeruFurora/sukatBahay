@@ -16,6 +16,7 @@ class CreateReviseYearsTable extends Migration
         Schema::create('revise_years', function (Blueprint $table) {
             $table->id();
             $table->string('year',5);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

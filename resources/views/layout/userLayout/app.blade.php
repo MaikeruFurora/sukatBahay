@@ -12,11 +12,16 @@
     <link rel="stylesheet" href="{{ asset('fontawesome/css/all.css') }}">
 </head>
 
-<body>
-    <!-- Navigation-->
-    @include('layout.userLayout.navbar')
-   <!-- end navbar -->
-    @yield('content')
+<body class="d-flex flex-column h-100">
+    <main class="flex-shrink-0">
+        <!-- Navigation-->
+        @include('layout.userLayout.navbar')
+        <!-- end navbar -->
+        <section class="py-5">
+            @yield('content')
+        </section>
+    </main>
+    {{-- @include('layout.userLayout.footer') --}}
     <script src="{{ asset("userstyle/js/script.js") }}"></script>
     <script src="{{ asset("userstyle/js/jquery-3.6.0.min.js") }}"></script>
     @yield('js')

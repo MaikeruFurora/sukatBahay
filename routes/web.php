@@ -44,11 +44,19 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/about-us', function () {
-    return view('about');
+    return view('users/about');
 })->name('about');
+
+
 
 Route::get('/search', [SearchController::class, 'search']);
 
+Route::get('rule-sections/{rule:slug}/{section:slug}', [SearchController::class, 'ruleSection']);
+
+
+Route::middleware((['auth:web','preventBackHistory']))->name('user')->prefix('user/')->group(function(){
+
+});
 
 
 Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admin.')->prefix('admin/')->group(function(){
@@ -99,18 +107,22 @@ Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admi
      * 
      */
     Route::get('section/content/{section}',[ContentController::class,'index'])->name('content');//view content.blade.php
-    // Route::get('section/content/list/{id}',[ContentController::class,'contentList']);// dataTable serverside process
-    Route::get('section/content/edit/{content}',[ContentController::class,'contentEdit'])->name('content.edit');// edit and get data
+    Route::get('section/content/list/{section}/{year?}',[ContentController::class,'contentList']);// dataTable serverside process
+    Route::get('section/content/edit/{content}',[ContentController::class,'contentEdit']);// edit and get data
     Route::delete('section/content/delete/{id}',[ContentController::class,'contentDelete'])->name('content.delete');// edit and get data
-    Route::get('section/content/create/{section}',[ContentController::class,'contentCreate'])->name('content.create');// edit and get data
-    Route::post('section/content/create/store',[ContentController::class,'contentStore'])->name('content.store');// store and update process
+    // Route::get('section/content/create/{section}',[ContentController::class,'contentCreate'])->name('content.create');// edit and get data
+    Route::post('section/content/store',[ContentController::class,'contentStore'])->name('content.store');// store and update process
 
     /**
      * 
      * Excercises route
      * 
      */
-    Route::get('exercises/{rule_id}',[ExerciseController::class,'index'])->name('exercises');//view content.blade.php
+    Route::get('exercises/{rule}',[ExerciseController::class,'index'])->name('exercises');//view content.blade.php
+    Route::post('exercises/store',[ExerciseController::class,'create']);//view content.blade.php
+    Route::get('exercises/list/{rule}',[ExerciseController::class,'list']);//view content.blade.php
+    Route::get('exercises/edit/{exercise}',[ExerciseController::class,'edit']);//view content.blade.php
+    Route::delete('exercises/delete/{exercise}',[ExerciseController::class,'destroy']);//view content.blade.php
 
     /**
      * 
@@ -119,6 +131,6 @@ Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admi
      */
     Route::post('revise-year/list',[ReviseYearController::class,'list']);// dataTable serverside process
     Route::post('revise-year/store',[ReviseYearController::class,'create']);// store and update process
-    Route::post('revise-year/edit/{reviseYear}',[ReviseYearController::class,'edit']);// get info for edit process
+    Route::get('revise-year/edit/{reviseYear}',[ReviseYearController::class,'edit']);// get info for edit process
 
 });

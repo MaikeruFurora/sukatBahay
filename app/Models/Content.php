@@ -14,9 +14,23 @@ class Content extends Model
     public function scopeStore($query){
         return $query->updateorcreate(['id'=>request('id')],[
             'section_id'=>request('section_id'),
-            'comparison'=>request('comparison'),
-            'year'=>request('year'),
+            'sub_content_id'=>request('sub_content_id'),
+            'compare_id'=>request('compare_id'),
+            'revise_year_id'=>request('revise_year_id'),
             'content'=>request('content')==="<p><br></p>"?null:request('content'),
+            'content_text'=>request('content_text'),
         ]);
+    }
+
+    public function sub_content(){
+        return $this->hasMany(Content::class,'sub_content_id');
+    }
+
+    public function section(){
+        return $this->belongsTo(Section::class);
+    }
+
+    public function reviseYear(){
+        return $this->belongsTo(ReviseYear::class);
     }
 }

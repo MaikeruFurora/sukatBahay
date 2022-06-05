@@ -24,11 +24,11 @@
                   <form method="POST" action="{{ route('auth.register_post') }}">@csrf
                     <div class="mb-3">
                       <label for="exampleInputEmail1" class="form-label">Fullname</label>
-                      <input type="text" name="fullname" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                      <input type="text" name="fullname" value="{{ old('fullname') }}" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
                       <label for="" class="form-label">Email address</label>
-                      <input type="email" name="email" class="form-control" >
+                      <input type="email" name="email" value="{{ old('email') }}" class="form-control" >
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Password</label>

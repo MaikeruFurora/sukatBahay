@@ -18,13 +18,17 @@ class CreateContentsTable extends Migration
             $table->unsignedBigInteger('section_id')->nullable();
             $table->foreign('section_id')->references('id')->on('sections');
            
-            $table->unsignedBigInteger('comparison')->nullable();
-            $table->foreign('comparison')->references('id')->on('contents');
+            $table->unsignedBigInteger('sub_content_id')->nullable();
+            $table->foreign('sub_content_id')->references('id')->on('contents');
+
+            $table->unsignedBigInteger('compare_id')->nullable();
+            $table->foreign('compare_id')->references('id')->on('contents');
            
             $table->unsignedBigInteger('revise_year_id')->nullable();
             $table->foreign('revise_year_id')->references('id')->on('revise_years');
            
             $table->text('content')->nullable();
+            $table->text('content_text')->nullable();
             $table->timestamps();
         });
     }

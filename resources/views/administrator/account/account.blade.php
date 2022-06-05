@@ -111,14 +111,13 @@
         columns: [
             { data:"id" },
             { data:"year" },
-            { data:"created_at" },
+            { data:"description" },
             { data:"updated_at" },
             { 
                 data:null,
                 render:function(data){
                     return `
                       <button class="btn btn-warning btn-sm pl-3 pr-3" name="btnEdit" value="${data.id}"><i class="fas fa-edit"></i> Edit</button>
-                      <a class="btn btn-success btn-sm pl-3 pr-3" href="section/${data.id}"><i class="fas fa-puzzle-piece"></i> Section</button>
                       `
                 }
             },
@@ -161,7 +160,7 @@
        })
 
        $(document).on('click','button[name="btnEdit"]',function(){
-        $("#reviseYearModalTitle").text('Edit Medicine')
+        $("#reviseYearModalTitle").text('Revision Year')
         $("#reviseYearForm button[type='submit']").text("Update");
         let updateId = $(this).val();
         $.ajax({
@@ -173,6 +172,7 @@
             }).done(function(data){
                 $('#reviseYearForm input[name="id"]').val(data.id)
                 $('input[name="year"]').val(data.year)
+                $('textarea[name="description"]').val(data.description)
                 $("#reviseYearModal").modal("show")
                 $("button[value="+updateId+"]").html(` <i class="fas fa-edit"></i> Edit `).attr("disabled", false);
             }) .fail(function (jqxHR, textStatus, errorThrown) {

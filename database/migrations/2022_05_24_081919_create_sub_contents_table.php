@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRulesTable extends Migration
+class CreateSubContentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateRulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rules', function (Blueprint $table) {
+        Schema::create('sub_contents', function (Blueprint $table) {
             $table->id();
-            $table->integer('rule_no');
-            $table->text('slug');
-            $table->text('title');
+            $table->unsignedBigInteger('content_id')->nullable();
+            $table->foreign('content_id')->references('id')->on('contents');
+            $table->text('sub_content');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateRulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rules');
+        Schema::dropIfExists('sub_contents');
     }
 }

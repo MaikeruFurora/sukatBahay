@@ -19,9 +19,9 @@ class ReviseYearController extends Controller
         $columns = array( 
             0 =>'id', 
             1 =>'year',
-            2 =>'created_at',
-            2 =>'updated_at',
-            3 =>'id',
+            2 =>'description',
+            3 =>'updated_at',
+            4 =>'id',
         );
         
         $totalData = ReviseYear::count();
@@ -44,14 +44,16 @@ class ReviseYearController extends Controller
         else {
         $search = $request->input('search.value'); 
 
-        $posts =  ReviseYear::orWhere('year', 'LIKE',"%{$search}%")
+        $posts =  ReviseYear::where('year', 'LIKE',"%{$search}%")
+                        ->orWhere('description', 'LIKE',"%{$search}%")
                         ->offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->latest()
                         ->get();
 
-        $totalFiltered =ReviseYear::orWhere('year', 'LIKE',"%{$search}%")
+        $totalFiltered =ReviseYear::where('year', 'LIKE',"%{$search}%")
+                        ->orWhere('description', 'LIKE',"%{$search}%")
                             ->offset($start)
                             ->limit($limit)
                             ->orderBy($order,$dir)
@@ -64,7 +66,7 @@ class ReviseYearController extends Controller
             foreach ($posts as $post) {
                 $nestedData['id'] = $post->id;
                 $nestedData['year'] = $post->year;
-                $nestedData['created_at'] = $post->created_at->format('F j, Y');
+                $nestedData['description'] = $post->description;
                 $nestedData['updated_at'] = $post->created_at->format('F j, Y');
                 $nestedData['id'] = $post->id;
                 $data[] = $nestedData;

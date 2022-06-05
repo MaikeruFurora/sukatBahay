@@ -23,7 +23,7 @@
                   <form method="POST" action="{{ route('auth.login_post') }}">@csrf
                     <div class="mb-3">
                       <label for="exampleInputEmail1" class="form-label">Email address</label>
-                      <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                      <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="{{ old("email") }}" aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Password</label>

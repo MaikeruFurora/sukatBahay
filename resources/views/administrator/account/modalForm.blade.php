@@ -10,8 +10,12 @@
                 <input type="hidden" name="id">
                 <div class="form-group">
                     <label>Year</label>
-                    <input class="form-control" type="number" name="year" required placeholder="eg. 2022">
+                    <input class="form-control" type="number" name="year" required placeholder="eg. 2022" required>
                </div>
+               <div class="form-group">
+                <label for="my-textarea">Description</label>
+                <textarea id="my-textarea" class="form-control" name="description" data-height="100" placeholder="Description here"></textarea>
+              </div>
             </div>
             <div class="modal-footer">
               <button 
