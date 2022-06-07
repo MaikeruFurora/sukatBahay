@@ -8,20 +8,31 @@ use Illuminate\Http\Request;
 class ReviseYearController extends Controller
 {
     public function create(Request $request){
+
         return ReviseYear::store();
+
     }
 
     public function edit(ReviseYear $reviseYear){
+
         return response()->json($reviseYear);
+        
     }
 
     public function list(Request $request){
+
         $columns = array( 
-            0 =>'id', 
+
+            0 =>'id',
+
             1 =>'year',
+
             2 =>'description',
+
             3 =>'updated_at',
+
             4 =>'id',
+
         );
         
         $totalData = ReviseYear::count();
@@ -29,19 +40,21 @@ class ReviseYearController extends Controller
         $totalFiltered = $totalData; 
 
         $limit = $request->input('length');
-        $start = $request->input('start');
-        $order = $columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
 
-        if(empty($request->input('search.value')))
-        {          
+        $start = $request->input('start');
+
+        $order = $columns[$request->input('order.0.column')];
+
+        $dir = $request->input('order.0.dir');
+        
+        if(empty($request->input('search.value'))){          
         $posts = ReviseYear::offset($start)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->latest()
                         ->get();
-        }
-        else {
+        }else {
+
         $search = $request->input('search.value'); 
 
         $posts =  ReviseYear::where('year', 'LIKE',"%{$search}%")
@@ -62,22 +75,36 @@ class ReviseYearController extends Controller
         }
 
         $data = array();
+
         if(!empty($posts)) {
+
             foreach ($posts as $post) {
+
                 $nestedData['id'] = $post->id;
+
                 $nestedData['year'] = $post->year;
+
                 $nestedData['description'] = $post->description;
+
                 $nestedData['updated_at'] = $post->created_at->format('F j, Y');
+
                 $nestedData['id'] = $post->id;
+
                 $data[] = $nestedData;
+
             }
         }
 
         $json_data = array(
-            "draw"            => intval($request->input('draw')),  
+
+            "draw"            => intval($request->input('draw')), 
+
             "recordsTotal"    => intval($totalData),  
+
             "recordsFiltered" => intval($totalFiltered), 
+
             "data"            => $data   
+
             );
 
         echo json_encode($json_data); 

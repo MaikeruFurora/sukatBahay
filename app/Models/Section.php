@@ -12,7 +12,7 @@ class Section extends Model
 
     protected $guarded=[];
 
-    public function rules(){
+    public function rule(){
         return $this->belongsTo(Rule::class);
     }
 

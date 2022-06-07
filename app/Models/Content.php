@@ -33,4 +33,50 @@ class Content extends Model
     public function reviseYear(){
         return $this->belongsTo(ReviseYear::class);
     }
+
+   
+
+
+    public function scopeSearchdata($query,$keyword){
+        
+        // properties
+        $data = array();
+        
+        $condition = preg_replace('/[^A-Za-z0-9\- ]/', '', $keyword);
+
+        $result = $query->with(['section:id,rule_id,section_title,slug','section.rule:id,title,slug'])
+
+                        ->whereHas('section',function($query) use($keyword){
+                            
+                            $query->where('section_title','like','%'.$keyword.'%');
+                            
+                        })->when($keyword ?? false,function ($query,$keyword){
+
+                             $query->where('content_text','like','%'.$keyword.'%');
+                                            
+                        })->limit(5)->get(); 
+
+       $replace_string = '<b>'.$condition.'</b>';
+
+        foreach($result as $key => $row){
+
+            $data[] = array(
+
+                'content'=>str_ireplace($condition, $replace_string, $row["content_text"]),
+
+                'section'=>str_ireplace($condition, $replace_string, $row["section"]["section_title"]),
+
+                'section_slug'=>str_ireplace($condition, $replace_string, $row["section"]["slug"]),
+
+                'rule'=> $row["section"]["rule"]["title"],
+
+                'rule_slug'=>str_ireplace($condition, $replace_string, $row["section"]["rule"]["slug"])
+
+            );
+
+        }
+    
+    return $data;
+    
+    }
 }

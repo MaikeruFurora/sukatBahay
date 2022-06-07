@@ -1,28 +1,19 @@
 @extends('layout.userLayout.app')
 @section('content')
-<div class="container">
-    <div class="text-center mb-5 py-3">
-        <h1 class="fw-bolder mb-2">{{ $rule->title }}</h1>
-        <p class="lead fw-normal text-muted mb-2">{{ $section->section_title }}</p>
-        <button class="btn btn-deafult btn-sm"><i class="fas fa-feather-alt"></i> Take an Exercises</button>
-    </div>
-    {{-- <div class="row">
-        <div class="col-md-3 offset-md-9">
-            <div class="mb-3 row">
-                <label for="inputPassword" class="col-md-3 col-form-label">Year</label>
-                <div class="col-md-9">
-                    <select id="my-select" class="form-select" name="year">
-                        <option value="none">None</option>
-                        @foreach ($year as $item)
-                            <option value="{{ $item->id }}">{{ $item->year }}</option>
-                        @endforeach
-                    </select>
-                </div>
+<header class="py-5">
+  <div class="container px-5">
+      <div class="row justify-content-center">
+          <div class="col-lg-8 col-xxl-6">
+              <div class="text-center my-5">
+                  <h1 class="fw-bolder mb-3">{{ $rule->title }}</h1>
+                  <p class="lead fw-normal text-muted mb-4">{{ $section->section_title }}</p>
+                  <button class="btn btn-deafult btn-sm"><i class="fas fa-feather-alt"></i> Take an Exercises</button>
               </div>
-           
-        </div>
-      </div> --}}
-    
+          </div>
+      </div>
+  </div>
+</header>
+<div class="container">  
    
     <div class="row">
       
@@ -32,8 +23,8 @@
               Sections
             </div>
             <ul class="list-group list-group-flush">
-             @foreach ($rule->sections as $item)
-               <a href="{{ url('rule-sections/'.$rule->slug.'/'.$item->slug) }}" style="text-decoration: none">
+            @foreach ($rule->sections as $item)
+               <a href="{{ url('section-content/'.$item->slug) }}" style="text-decoration: none">
                     <li class="list-group-item {{ $item->id==$section->id?'active':'' }}">
                     {{-- #$item->id==$section->id?' <i class="fas fa-check-circle"></i> ':'' --}}
                     {{ $item->section_title }}
@@ -51,15 +42,12 @@
                        @for ($i = 0; $i < count($unique); $i++)
                         <li class="nav-item">
                           <a class="nav-link {{ $i==0?'show active':'' }}" id="nav-{{ str_replace(' ','-',$unique[$i]) }}-tab" data-bs-toggle="tab" data-bs-target="#nav-{{ str_replace(' ','-',$unique[$i]) }}" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">
-                            {{ $unique[$i] }}
+                            &nbsp;&nbsp;{{ $unique[$i] }}&nbsp;&nbsp;
                           </a>
                         </li>
                         @endfor
                        
                       </ul>
-                    <nav>
-                       
-                      </nav>
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="nav-tabContent">
@@ -72,19 +60,19 @@
                               @if ($unique[$i]===$value->reviseYear->year)
                                   <div class="p-4">
                                       @php
-                                          echo html_entity_decode($value->content)
+                                          echo html_entity_decode(str_ireplace($condition, $replace_string,$value->content))
                                       @endphp
                                       <div class="btn-group mb-2 mt-2" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-sm btn-warning" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
+                                        <button type="button" class="btn btn-sm btn-outline-warning text-dark" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
                                       </div>
                                   </div>
                                   @foreach ($value->sub_content as $item)
                                   <div class="px-5">
                                       @php
-                                          echo html_entity_decode($item->content)
+                                          echo html_entity_decode(str_ireplace($condition, $replace_string,$item->content))
                                       @endphp
                                       <div class="btn-group mb-3" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-sm btn-warning" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
+                                        <button type="button" class="btn btn-sm btn-outline-warning text-dark" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
                                       </div>
                                   </div>
                                   @endforeach
@@ -95,14 +83,15 @@
                           {{-- for no revision --}}
                             <div class="p-4">
                               @php
-                                echo html_entity_decode($value->content)
+                                echo html_entity_decode(str_ireplace($condition, $replace_string,$value->content))
                               @endphp
                               <div class="btn-group mt-2" role="group" aria-label="Basic example">
-                                  <button type="button" class="btn btn-sm btn-warning" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
+                                  <button type="button" class="btn btn-sm btn-outline-warning text-dark" style="font-size: 11px"><i class="fas fa-bookmark"></i> Bookmark</button>
                               </div>
                             </div>
                           @endif
                         @endforeach
+
                       </div>
                      @endfor
                     </div>

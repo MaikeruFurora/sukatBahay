@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/summernote/summernote-bs4.css') }}">
 @endsection
 @section('content')
-@include('administrator.section_content.modalForm')
+{{-- @include('administrator.section_content.modalForm') --}}
 <section class="section">
     <div class="section-body">
         <h2 class="section-title">Content</h2>
@@ -12,13 +12,13 @@
             {{ $rule->title }} / {{ $data->section_title }} / Content
         </p>
        <div class="row">
-            <div class="col-12">
+            <div class="col-lg-7 col-md-7 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ $data->section_title }}</h4>
                         <form class="card-header-form mr-3">
                           <select id="my-select" class="custom-select" name="select_year">
-                            <option value="">None</option>
+                            <option value="">No Revision</option>
                             @foreach ($year as $item)
                             <option value="{{ $item->id }}">{{ $item->year }}</option>
                             @endforeach
@@ -28,7 +28,7 @@
                               
                             <a class="btn btn-dark" href="{{ route('admin.section',$data->rule_id) }}" style="font-size: 14px;color:white"> Back</a>
                             {{-- <a class="btn btn-primary" href="{{ route('admin.content.create',$data->id) }}" style="font-size: 14px;color:white"> Create Content</a> --}}
-                            <button class="btn btn-primary" name="btnCreate" style="font-size: 14px;color:white"> Create Content</button>
+                            {{-- <button class="btn btn-primary" name="btnCreate" style="font-size: 14px;color:white"> Create Content</button> --}}
                           </div>
                           
                     </div>
@@ -36,6 +36,46 @@
                       <div class="media-content"></div>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-5 col-md-5 col-sm-12">
+              <!-- Modal -->
+              
+              <div class="card">
+                <div class="card-body">
+                  <form id="contentForm">@csrf
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="section_id" value="{{ $data->id }}">
+                    <input type="hidden" name="sub_content_id">
+                    {{--  --}}
+                    <div class="form-row">
+                      <div class="form-group col-6">
+                        <label for="">Section</label>
+                        <input type="text" class="form-control" value="{{ $data->section_title }}" readonly>
+                      </div>
+                      <div class="form-group col-6">
+                        <label for="">Year</label>
+                        <select name="revise_year_id" id="" class="custom-select">
+                          <option value="">No Revision</option>
+                          @foreach ($year as $item)
+                          <option value="{{ $item->id }}">{{ $item->year }}</option>
+                          @endforeach
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Comparison content</label>
+                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group">
+                      <label class="col-form-label text-md-right">Content</label>
+                        <textarea class="summernote" name="content"></textarea>
+                        <textarea class="d-none" name="content_text"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <span class="reset"></span>
+                  </form>
+                </div>
+              </div>
             </div>
         </div>
     </div>
@@ -48,7 +88,7 @@
     <script>
         "use strict"
         $('.summernote').summernote({
-          height: 100,
+          height: ($(window).height() - 700),
             callbacks: {
                 onPaste: function (e) {
                     var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');
@@ -65,24 +105,19 @@
         
         let selectedTag = $('select[name="select_year"] option');
         const clearForm = () =>{
-          $("#contentForm")[0].reset()
           $('.summernote').summernote('reset')
           $('#contentForm input[name="id"]').val('');
           $('#contentForm input[name="sub_content_id"]').val('');
+          $('button[name="reset"]').hide();
           // $("select[name='revise_year_id'] option[value="+ selectedTag.filter(":selected").val() +"]").attr("selected", true);
         }
-       $(document).on('click','button[name="btnCreate"]',function(){
-          $("#contentForm button[type='submit']").text("Create")
-          $("#contentModalTitle").text("Create Content");
-          clearForm()
-          $("#contentModal").modal("show")
-       })
+      
    
         $('#contentForm').on('submit',function(e){
           
             e.preventDefault()
              let cleanText =$($(".summernote").summernote("code")).text()
-            $('textarea[name="content_text"]').val(cleanText)
+             $('textarea[name="content_text"]').val(cleanText)
             $.ajax({
                 url:'store',
                 type:'POST',
@@ -99,14 +134,7 @@
               
                 getToast("success", `<i class="fas fa-book-reader"></i>`,"Successfully saved");
                 $("#contentForm button[type='submit']").text("Create").attr("disabled", false); 
-                let ifId = $('#contentForm input[name="id"]').val();
-                if (ifId=='') {
-                  $("#contentModal").modal("show")
-                }else{
-                  $("#contentModal").modal("hide")
-                }
-
-                $("#contentModal").modal("hide")
+               
                clearForm()
                content(selectedTag.filter(":selected").val())
             })
@@ -125,20 +153,33 @@
 
         const sectionId = `<?=$data->id?>`;
 
- 
+      const _cancelButton = () =>{
+          let _cancelButton=` <button type="button" name="reset" class="btn btn-warning">Cancel</button>`;
+          $("#contentForm .reset").html(_cancelButton)
+       }
+
+       $(document).on('click','button[name="reset"]',function(){
+         clearForm()
+         $(this).hide();
+       })
+
+
        $(document).on('click','button[name="btnEdit"]',function(){
-        $("#contentForm button[type='submit']").text("Update");
+         $("#contentForm button[type='submit']").text("Update");
+         clearForm()
         $.ajax({
                 url:`edit/${$(this).val()}`,
                 type:'GET'
             }).done(function(data){
-                clearForm()
+                _cancelButton()
                 $('#contentForm input[name="id"]').val(data.id)
                 $('#contentForm input[name="sub_content_id"]').val(data.sub_content_id)
-                $("#contentModal").modal("show")
                 $('.summernote').summernote('code',data.content)
-                console.log(selectedTag.filter(":selected").val());
-                $("select[name='revise_year_id'] option[value="+ (data.revise_year.id!='')?data.revise_year.id : '' +"]").attr("selected", true); 
+                if (data.revise_year_id!=null) {
+                  $("select[name='revise_year_id'] option[value="+ data.revise_year.id+"]").attr("selected", true); 
+                } else {
+                  $("select[name='revise_year_id'] option").prop("selectIndex", 0); 
+                }
             }) .fail(function (jqxHR, textStatus, errorThrown) {
                 getToast("error", "Eror", errorThrown);
                 $("#contentForm button[type='submit']").text("Update").attr("disabled", false);
@@ -277,10 +318,11 @@
 
     $(document).on('click','button[name="btnSubContent"]',function(){
           $("#contentForm button[type='submit']").text("Create")
-          $("#contentModalTitle").text("Create Sub Content");
+          // $("#contentModalTitle").text("Create Sub Content");
           clearForm()
+          _cancelButton()
           $('#contentForm input[name="sub_content_id"]').val($(this).val());
-          $("#contentModal").modal("show")
+          
     })
 
     $('select[name="select_year"]').on('change',function(){

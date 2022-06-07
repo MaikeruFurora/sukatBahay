@@ -4,15 +4,11 @@
     <div class="row height d-flex justify-content-center align-items-center">
         <div class="col-md-8">
             <div class="text-center">
-                {{-- <div class="row">
-                    <div class="col-md-6 offset-md-3 pl-5 pr-5 pb-0 ">
-                        <img src="{{ asset('img/welcome-logo.png') }}" class=" img-fluid" width="35%" alt="">
-                    </div>
-                  </div> --}}
-                
-                <h1 class="display-1 text-center mb-5 welcome-title">Sukat<span style="color: green;">Bahay</span></h1>
+                <h1 class="display-1 text-center my-5 welcome-title">Sukat <span style="color: #004d39;">Bahay</span></h1>
             </div>
-            <div class="search"> <i class="fa fa-search"></i> <input type="text" name="search" class="form-control" placeholder="Have a question? Ask Now"> <button class="btn btn-primary">Search</button> </div>
+            <form action="{{ route('search.force') }}" method="GET">
+                <div class="search"> <i class="fa fa-search"></i> <input type="text" name="search" class="form-control" placeholder="Have a question? Ask Now" required> <button class="btn btn-primary">Search</button> </div>
+            </form>
             <span id="search_result"></span>
         </div>
     </div>
@@ -25,7 +21,7 @@
             let q = $(this).val();
             if (parseInt(q.length)>=4) {
                 $.ajax({
-                    url:`search`,
+                    url:`search/auto-suggest`,
                     type:'GET',
                     data:{
                         q
@@ -35,14 +31,11 @@
                     if(data.length > 0){
                         data.forEach(element => {
                            
-                                _html += '<a href="#" class="list-group-item list-group-item-action" style="font-size:14px" >'+
-                             
-                                    cleanDisplay(element,q)
-                                    +'</a>';
+                                _html += `<a href="/rule-content/${removeTags(element.rule_slug)}/${removeTags(element.section_slug) }/${q}" class="list-group-item list-group-item-action" style="font-size:14px" onclick="" >${cleanDisplay(element,q)}</a>`;
                          
                         });
                     }else {
-                        _html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
+                        // _html += '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
                     }
 
                     _html += '</div>';
@@ -58,19 +51,40 @@
             }
         })
 
+        const removeTags = (str) => {
+                if ((str===null) || (str===''))
+                    return false;
+                else
+                    str = str.toString();
+                    
+                // Regular expression to identify HTML tags in 
+                // the input string. Replacing the identified 
+                // HTML tag with a null string.
+                return str.replace( /(<([^>]+)>)/ig, '');
+            }
         const cleanDisplay = (value,search) =>{
             let pos = value.content.indexOf(search);
             let len = value.content.length
-            return value.section+'<br>'+value.content.substr(0,(ranges(pos,len)/2));
+
+            return value.section
+            +'<br>&nbsp;<i class="fas fa-search"></i>&nbsp;'+value.content.substr(ranges(0,pos-4),ranges(pos,len))+' ...';
         }
         const  ranges = (start, end) => {
             /* generate a range : [start, start+1, ..., end-1, end] */
-            var len = end - start + 1;
-            var a = new Array(len);
+            let len = end - start + 1;
+            let a = new Array(len);
+            let val;
             for (let i = 0; i < len; i++) a[i] = start + i;
-            return a.length;
+            console.log(a);
+
+            while (parseInt(a.length+1)>=20) {    
+                return (a.length%2!=1)?(a.length-1):(a.length/2)
+            }
+
+            
         }
-        console.log(ranges(5,10));
+        
+
 
         const recent_search = () =>{
             // $.ajax({

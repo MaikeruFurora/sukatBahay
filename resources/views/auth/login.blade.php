@@ -13,10 +13,17 @@
       <div class="container">
         <div class="row height d-flex justify-content-center align-items-center">
             <div class="col-lg-4">
+              @if (session()->has('msg'))
+              <div class="alert alert-warning" role="alert">
+                {{ session()->get('msg') }}
+              </div>
+              @endif
               <div class="card p-2">
                 <div class="card-body">
                   <div class="text-center">
-                    <img  src="{{ asset($logo) }}" height="80" alt="">
+                    <a href="{{ route('welcome') }}">
+                      <img  src="{{ asset($logo.'sb.png') }}" height="80" alt="">
+                    </a>
                     {{-- <h2 class="display-6 text-center"><span style="color: #088441;">Sukat</span><span style="color: #FEAF2F;">Bahay</span></h2> --}}
                     <h5 class="mb-4 mt-2 lead">Sign in</h5>
                   </div>
@@ -32,7 +39,7 @@
                     <div class="d-grid gap-2 mx-auto mt-4 mb-2">
                       <button class="btn btn-success" type="submit">Submit</button>
                     </div>
-                    <small>Dont have an account? <a href="{{ route('auth.register') }}">Register</a></small>
+                    <small>Don't have an account? <a href="{{ route('auth.register') }}">Register</a></small>
                   </form>
                 </div>
               </div>

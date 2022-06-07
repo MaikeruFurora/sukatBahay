@@ -18,8 +18,10 @@
               <div class="card p-2">
                 <div class="card-body">
                   <div class="text-center">
-                    <img  src="{{ asset($logo) }}" height="100" alt="">
-                    <h5 class="mb-4 lead">Register</h5>
+                    <a href="{{ route('welcome') }}">
+                      <img  src="{{ asset($logo.'sb.png') }}" height="80" alt="">
+                    </a>
+                    <h5 class="mb-4 mt-2 lead">Register</h5>
                   </div>
                   <form method="POST" action="{{ route('auth.register_post') }}">@csrf
                     <div class="mb-3">

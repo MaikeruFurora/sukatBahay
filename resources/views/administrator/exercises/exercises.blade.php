@@ -74,6 +74,7 @@
     <script>
       "use strict"
        $('.summernote').summernote({
+            height: ($(window).height() - 700),
             callbacks: {
                 onPaste: function (e) {
                     var bufferText = ((e.originalEvent || e).clipboardData || window.clipboardData).getData('Text');

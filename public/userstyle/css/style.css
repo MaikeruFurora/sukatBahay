@@ -20,6 +20,7 @@
 
 body {
     font-family: 'Poppins-Regular', sans-serif;
+    background: #F5F5F5
 }
 
 .navbar-light {
@@ -34,7 +35,7 @@ body {
 /* ============ desktop view ============ */
 
 .add-padding {
-    padding: .25rem 1.1rem !important;
+    /* padding: .25rem 1.1rem !important; */
 }
 
 .drop-down02 {
@@ -107,7 +108,7 @@ font-weight: 300 */
 
 .search input:focus {
     box-shadow: none;
-    border: 2px solid #088441
+    border: 2px solid #004d39
 }
 
 .search .fa-search {
@@ -122,5 +123,17 @@ font-weight: 300 */
     right: 5px;
     height: 50px;
     width: 110px;
-    background: #088441
+    background: #004d39
+}
+
+.dropdown-item {
+    overflow: auto;
+    color: black;
+    width: 400px;
+    white-space: normal;
+}
+
+.new-active {
+    color: white;
+    background: #d6d4d4
 }

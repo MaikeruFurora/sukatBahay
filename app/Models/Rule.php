@@ -24,45 +24,14 @@ class Rule extends Model
     }
 
     public function scopeStore($query){
+         [$first,$second] = explode(' - ',request('title'));
         return $query->updateorcreate(['id' => request('id')],[
             'rule_no' => request('rule_no'),
             'slug' => $this->makeSlug(request('title')),
-            'title' => ucwords(request('title')),
+            'title' => strtoupper($first).' - '.$second,
         ]);
     }
-
-    /**
-     * > The rulesContent function returns all the Content models that belong to the Section models
-     * that belong to the current Rules model
-     * 
-     * @return A collection of Content objects
-     */
-    public function rulesContent(){
-        return $this->hasManyThrough(Content::class,Section::class);
-    }
-
-    public function scopeSearchdata($query,$keyword){
-        $data = array();
-        $condition = preg_replace('/[^A-Za-z0-9\- ]/', '', $keyword);
-        $result = Section::join('rules','sections.rule_id','rules.id')
-       ->join('contents','sections.id','contents.section_id')
-    //    ->where('rules.title','like',"%{$condition}%")
-    //    ->orwhere('sections.section_title','like',"%{$condition}%")
-       ->orwhere('contents.content_text','like',"%{$condition}%")
-       ->limit(5)
-       ->get();
-
-       $replace_string = '<b>'.$condition.'</b>';
-
-	foreach($result as $row)
-	{
-		$data[] = array(
-			'content'=>str_ireplace($condition, $replace_string, $row["content_text"]),
-			'section'=>str_ireplace($condition, $replace_string, $row["section_title"])
-		);
-	}
-    return $data;
-    }
+   
 
     public function exercises(){
         return $this->hasMany(Exercise::class);
@@ -77,5 +46,9 @@ class Rule extends Model
        }
        
    }
+
+//    public function contents(){
+//     return $this->hasManyThrough(Content::class,Section::class);
+// }
 
 }

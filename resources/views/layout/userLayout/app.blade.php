@@ -17,13 +17,22 @@
         <!-- Navigation-->
         @include('layout.userLayout.navbar')
         <!-- end navbar -->
-        <section class="py-5">
+        <section class="">
             @yield('content')
         </section>
+        {{-- bookmark --}}
+        @if (!auth()->guest())
+        @include('layout.userLayout.offcanvas') 
+        @endif
+        {{-- bookmark --}}
     </main>
     {{-- @include('layout.userLayout.footer') --}}
-    <script src="{{ asset("userstyle/js/script.js") }}"></script>
+    
     <script src="{{ asset("userstyle/js/jquery-3.6.0.min.js") }}"></script>
+    <script src="{{ asset("userstyle/js/script.js") }}"></script>
+    {{-- <script src="{{ asset("userstyle/js/bootstrap.bundle.min.js") }}"></script>
+    <script src="{{ asset("userstyle/js/bootstrap.min.js") }}"></script> --}}
+    
     @yield('js')
 </body>
 

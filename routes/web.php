@@ -8,6 +8,7 @@ use App\Http\Controllers\ReviseYearController;
 use App\Http\Controllers\RuleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -44,14 +45,14 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/about-us', function () {
-    return view('users/about');
-})->name('about');
+    return view('about');
+})->name('aboutUs');
 
-
-
-Route::get('/search', [SearchController::class, 'search']);
-
-Route::get('rule-sections/{rule:slug}/{section:slug}', [SearchController::class, 'ruleSection']);
+Route::get('search/auto-suggest', [SearchController::class, 'autoSuggest']);
+Route::get('search/force', [SearchController::class, 'searchForce'])->name('search.force');
+Route::get('section-content/{section:slug}/{keyword?}', [SearchController::class, 'sectionContent']);
+Route::get('rule-content/{rule:slug}/{section:slug}/{keyword?}', [SearchController::class, 'ruleContent'])->name('rule.content');
+Route::get('bookmark/content/{content}', [UserController::class, 'bookmark'])->name('content.bookmark');
 
 
 Route::middleware((['auth:web','preventBackHistory']))->name('user')->prefix('user/')->group(function(){
