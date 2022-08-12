@@ -24,7 +24,7 @@ class AdminMiddleware
             if ($userType->user_type=='yes') {
                 return $next($request);
             } else {
-                // return redirect()->route('nurse.dashboard');
+                return redirect()->route('welcome');
             }
         } else {
             if (Auth::guard('web')->check()) {

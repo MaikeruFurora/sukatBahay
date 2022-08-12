@@ -15,13 +15,18 @@
     <div class="container">
         <div class="row height d-flex justify-content-center align-items-center">
             <div class="col-lg-4">
+              @if (session()->has('msg'))
+              <div class="alert alert-{{ session()->get('action') ?? 'success' }}" role="alert">
+                {{ session()->get('msg') }}
+              </div>
+              @endif
               <div class="card p-2">
                 <div class="card-body">
                   <div class="text-center">
                     <a href="{{ route('welcome') }}">
                       <img  src="{{ asset($logo.'sb.png') }}" height="80" alt="">
                     </a>
-                    <h5 class="mb-4 mt-2 lead">Register</h5>
+                    <h5 class="mb-4 mt-2 lead">Sign Up</h5>
                   </div>
                   <form method="POST" action="{{ route('auth.register_post') }}">@csrf
                     <div class="mb-3">
@@ -31,6 +36,7 @@
                     <div class="mb-3">
                       <label for="" class="form-label">Email address</label>
                       <input type="email" name="email" value="{{ old('email') }}" class="form-control" >
+                      <small class="text-danger">@error('email'){{ $message }}@enderror</small>
                     </div>
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -39,12 +45,10 @@
                     <div class="mb-3">
                       <label for="" class="form-label">Confirm password</label>
                       <input type="password" name="confirm_password" class="form-control" id="" aria-describedby="emailHelp">
-                      @error('confirm_password')
-                        <small class="text-danger">{{ $message }}</small>
-                      @enderror
+                      <small class="text-danger">@error('confirm_password'){{ $message }}@enderror</small>  
                     </div>
                     <div class="d-grid gap-2 mx-auto mt-4 mb-2  ">
-                      <button class="btn btn-success" type="submit">Submit</button>
+                      <button class="btn btn-success" type="submit">Sign Up</button>
                     </div>
                       <label class="custom-switch mt-2">
                         <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input">
@@ -52,7 +56,7 @@
                         <span class="custom-switch-description">I agree with terms and conditions</span>
                       </label>
                     <br>
-                    <small>Already have an account? <a href="{{ route('auth.login') }}">Login</a></small>
+                    <small>Already have an account? <a href="{{ route('auth.login') }}">Sign In</a></small>
                   </form>
                 </div>
               </div>

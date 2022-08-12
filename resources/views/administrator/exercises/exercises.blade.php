@@ -2,6 +2,7 @@
 @section('title','Exercises | Management')
 @section('moreCss')
         <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/summernote/summernote-bs4.css') }}">
+        <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/select2/css/select2.min.css') }}">
         <!-- DataTables -->
         <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/datatables/datatables.min.css') }}">
         <link rel="stylesheet" href="{{ asset('adminstyle/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
@@ -13,18 +14,14 @@
     <div class="section-body">
         <h2 class="section-title">Exercises</h2>
         <p class="section-lead">
-            {{ ucfirst(strtolower($rule->title)) }} / Exercises
+            <span class="rule-title">Select Category Question</span> / Exercises
         </p>
         <div class="row">
            <div class="col-lg-7 col-md-7 col-sm-12">
                 <div class="card">
                     <div class="card-body">
-
                         <div id="accordion">
-                            
-                          
                         </div>
-
                     </div>
                 </div>
            </div>
@@ -33,10 +30,15 @@
                 <div class="card-body">
                     <form id="exerciseForm">@csrf
                       <input type="hidden" name="id">
-                        <input type="hidden" name="rule_id" value="{{ $rule->id }}">
+                        <input type="hidden" name="rule_id">
                         <div class="form-group">
-                            <label for="exampleInputEmail1">Category</label>
-                            <input type="text" class="form-control" value="{{ ucfirst(strtolower($rule->title)) }}" readonly>
+                            <label for="">Category</label>
+                            <select class="form-control select2">
+                              <option value="">Select Category</option>
+                              @foreach ($rulesList as $item)
+                              <option value="{{ $item->id }}">{{ $item->title }}</option>
+                              @endforeach
+                            </select>
                           </div>
                         <div class="form-group">
                           <label for="exampleInputEmail1">Answer(s)</label>
@@ -68,12 +70,28 @@
 @endsection
 
 @section('moreJs')
+  <script src="{{ asset('adminstyle/assets/modules/select2/js/select2.full.min.js') }}"></script>
   <script src="{{ asset('adminstyle/assets/modules/summernote/summernote-bs4.js') }}"></script> 
-   <script src="{{ asset('adminstyle/assets/modules/datatables/datatables.min.js') }}"></script>
-   <script src="{{ asset('adminstyle/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('adminstyle/assets/modules/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('adminstyle/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
     <script>
       "use strict"
+
+      let temValue=null;
+
+      $(".select2").select2();
+
+      $(".select2").on('change',function(){
+        $(".rule-title").text($(".select2 :selected").text())
+        $('input[name="rule_id"]').val($(this).val())
+        list($(this).val())
+      })
+
+
+
        $('.summernote').summernote({
+            dialogsInBody: true,
+            minHeight: 250,
             height: ($(window).height() - 700),
             callbacks: {
                 onPaste: function (e) {
@@ -112,82 +130,84 @@
 
 
       $("#exerciseForm").on('submit',function(e){
-      e.preventDefault();
-      $.ajax({
-            url: "store",
-            type: "POST",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            beforeSend: function () {
-                $("button[name='btnExercise']")
-                    .html(`Saving ... `).attr("disabled", true);
-            },
-        })
-            .done(function (data) {
-                list($("#exerciseForm input[name='id']").val())
-                clearForm()
-                getToast("success", "Done", "Successsfuly Save new record");
-                $("input[name='id']").val("");
-                $("button[name='btnExercise']").html("Submit").attr("disabled", false);
-            })
-            .fail(function (jqxHR, textStatus, errorThrown) {
-                getToast("error", "Eror", errorThrown);
-                $("button[name='btnExercise']").html("Submit").attr("disabled", false);
-            });
-    })
-
-    let rule = $("input[name='rule_id']").val();
-   
-    const list = (val=null) =>{
-        let _question = ``;
-
+        e.preventDefault();
         $.ajax({
-        url: `list/${rule}`,
-        type: "GET",
-        data: { _token: $('input[name="_token"]').val() },
-        beforeSend: function(){
-            $("#accordion").html(` 
-            Loading...`);
-        }
-       })
-        .done(function (response) {
-          if (response.exercises.length>0) {   
-            response.exercises.forEach((element,i) => {
-                i++
-                _question+=`
-                <div class="accordion">
-                              <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-${i}" aria-expanded="${ val==element.id?'true':'' }">
-                               
-                                <h4>Quesion ${ i }</h4>
-                                
-                              </div>
-                              <div class="accordion-body collapse ${ val==element.id?'show':'' }" id="panel-body-${i}" data-parent="#accordion">
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                  ${ element.question }
-                                </p>
-                                <br>
-                                <small><b>Answer(s):</b> </small>
-                                ${ element.answers.map(e=>`<span class="badge badge-success pt-1 pb-1">${e}</span>`) }
-                                <div class="float-right">
-                                  <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-secodnary btn-sm edit_${element.id}" name="btnEdit" value="${element.id}"><i class="fas fa-edit"></i> Edit</button>
-                                    <button type="button" class="btn btn-secodnary btn-sm" delete_${element.id} name="btnDelete" value="${element.id}"><i class="fas fa-trash"></i> Delete</button>
+              url: "exercises/store",
+              type: "POST",
+              data: new FormData(this),
+              processData: false,
+              contentType: false,
+              cache: false,
+              beforeSend: function () {
+                  $("button[name='btnExercise']")
+                      .html(`Saving ... `).attr("disabled", true);
+              },
+          })
+              .done(function (data) {
+                  list($(".select2 :selected").val(),temValue)
+                  clearForm()
+                  getToast("success", "Done", "Successsfuly Save new record");
+                  $("input[name='id']").val("");
+                  $("button[name='btnExercise']").html("Submit").attr("disabled", false);
+              })
+              .fail(function (jqxHR, textStatus, errorThrown) {
+                  getToast("error", "Eror", errorThrown);
+                  $("button[name='btnExercise']").html("Submit").attr("disabled", false);
+              });
+      })
+
+   
+    const list = (rule=null,val=null) =>{
+        let _question = ``;
+        if (rule==null) {
+          $("#accordion").html(`<small class="text-center">No data available</small>`);
+        } else {
+          $.ajax({
+          url: `exercises/list/${rule}`,
+          type: "GET",
+          // data: { _token: $('input[name="_token"]').val() },
+          beforeSend: function(){
+              $("#accordion").html(` 
+              Loading...`);
+          }
+         })
+          .done(function (response) {
+            if (response.exercises.length>0) {   
+              response.exercises.forEach((element,i) => {
+                  i++
+                  _question+=`
+                  <div class="accordion">
+                                <div class="accordion-header" role="button" data-toggle="collapse" data-target="#panel-body-${i}" aria-expanded="${ (val==element.id?'true':'') ?? (temValue==null && val==null) }">
+                                 
+                                  <h4>Quesion ${ i }</h4>
+                                  
+                                </div>
+                                <div class="accordion-body collapse ${ val==element.id?'show':'' }" id="panel-body-${i}" data-parent="#accordion">
+                                  <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                                    ${ element.question }
+                                  </p>
+                                  <br>
+                                  <small><b>Answer(s):</b> </small>
+                                  ${ element.answers.map(e=>`<span class="badge badge-success pt-1 pb-1">${e}</span>`) }
+                                  <div class="float-right">
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                      <button type="button" class="btn btn-secodnary btn-sm edit_${element.id}" name="btnEdit" value="${element.id}"><i class="fas fa-edit"></i> Edit</button>
+                                      <button type="button" class="btn btn-secodnary btn-sm" delete_${element.id} name="btnDelete" value="${element.id}"><i class="fas fa-trash"></i> Delete</button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-               `
-            });
-          }else{
-            _question=`<small class="text-center">No data available</small>`
-          }
-          $("#accordion").html(_question);
-        })
-        .fail(function (jqxHR, textStatus, errorThrown) {
-            getToast("error", "Eror", errorThrown);
-        });
+                 `
+              });
+            }else{
+              _question=`<small class="text-center">No data available</small>`
+            }
+            $("#accordion").html(_question);
+          })
+          .fail(function (jqxHR, textStatus, errorThrown) {
+              getToast("error", "Eror", errorThrown);
+          });
+        }
     }
 
     list()
@@ -199,12 +219,13 @@
         $("#exerciseForm button[type='submit']").text("Update");
         $(".edit_"+id_edit).attr("disabled",true)
         $.ajax({
-                url:`edit/${id_edit}`,
+                url:`exercises/edit/${id_edit}`,
                 type:'GET',
                 beforeSend: function(){
                     $(".edit_"+id_edit).html(`Loading...`); 
                 }
             }).done(function(data){
+              temValue=id_edit
               $(".edit_"+id_edit).html(`<i class="fas fa-edit"></i> Edit`); 
                 $('#exerciseForm input[name="id"]').val(data.id)
                 $('#exerciseForm input[name="rule_id"]').val(data.rule_id)
@@ -228,18 +249,20 @@
        $(document).on('click','button[name="reset"]',function(){
          clearForm()
          $(this).hide();
+         $("#exerciseForm button[type='submit']").text("Submit");
        })
 
-       const clearForm = () =>{
-          $('#exerciseForm input[name="id"]').val('')
-          $('#exerciseForm input[name="rule_id"]').val('')
-          // $('#exerciseForm textarea[name="question"]').val('')
-          $('.summernote').summernote('reset')
-          $('#exerciseForm input[name="answers[]"]').val('')
-          $("#moreInput").html('')
-          $('button[name="reset"]').hide();
-          $('button[name="btnEdit"]').attr('disabled',false);
-       }
+      const clearForm = () =>{
+        temValue=null
+        $('#exerciseForm input[name="id"]').val('')
+        // $('#exerciseForm input[name="rule_id"]').val('')
+        $('#exerciseForm textarea[name="question"]').val('')
+        $('.summernote').summernote('reset')
+        $('#exerciseForm input[name="answers[]"]').val('')
+        $("#moreInput").html('')
+        $('button[name="reset"]').hide();
+        $('button[name="btnEdit"]').attr('disabled',false);
+      }
 
 
 
@@ -247,15 +270,15 @@
         let deletedID = $(this).val();
         if (confirm("Are you sure?")) {
           $.ajax({
-          url: `delete/${deletedID}`,
+          url: `exercises/delete/${deletedID}`,
           type: "DELETE",
           data: { _token: $('input[name="_token"]').val() },
           beforeSend: function(){
               $('.delete_'+deletedID).html(` Deleting... `).attr("disabled", true);
-              list()
-          }
-        })
+            }
+          })
           .done(function (response) {
+            list($(".select2 :selected").val())
             $('.delete_'+deletedID).html(`<i class="fa fa-trash"></i> Delete`).attr('disabled',false)
             getToast("success", "Success", "Data has been successfully deleted!");
             content(selectedTag.filter(":selected").val())

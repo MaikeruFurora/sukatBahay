@@ -34,6 +34,11 @@ Route::middleware(['guest:web', 'preventBackHistory'])->name('auth.')->group(fun
     Route::get('/register', function () {return view('auth/register');})->name('register');
     Route::post('/login/post', [AuthController::class, 'login_post'])->name('login_post');
     Route::post('/register/post', [AuthController::class, 'regiter_post'])->name('register_post');
+    Route::get('/forgot', function () {return view('auth/forgot');})->name('forgot');
+    Route::post('/forgot/post', [AuthController::class, 'forgot_post'])->name('forgot_post');
+    Route::get('/auth/reset/{token}',[AuthController::class, 'reset_password'])->name('reset');
+    Route::post('/auth/reset',[AuthController::class, 'reset_now'])->name('reset_now');
+    Route::get('/auth/verified/{token}',[AuthController::class, 'verified'])->name('verified');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
@@ -53,14 +58,20 @@ Route::get('search/force', [SearchController::class, 'searchForce'])->name('sear
 Route::get('section-content/{section:slug}/{keyword?}', [SearchController::class, 'sectionContent']);
 Route::get('rule-content/{rule:slug}/{section:slug}/{keyword?}', [SearchController::class, 'ruleContent'])->name('rule.content');
 Route::get('bookmark/content/{content}', [UserController::class, 'bookmark'])->name('content.bookmark');
+Route::post('bookmark/content/delete/{id}', [UserController::class, 'bookmarkDestroy'])->name('content.bookmark.destroy');
+Route::get('user/content/{content}', [UserController::class, 'bookmark'])->name('content.bookmark');
+Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
+Route::get('user/quiz', [ExerciseController::class, 'quiz'])->name('user.quiz');
+Route::get('user/quiz/list/{rule}', [ExerciseController::class, 'getQuizList']);
+Route::post('user/quiz/store', [ExerciseController::class, 'storeAnswer']);
 
+// Route::middleware((['auth:web','preventBackHistory']))->name('user')->prefix('user/')->group(function(){
 
-Route::middleware((['auth:web','preventBackHistory']))->name('user')->prefix('user/')->group(function(){
-
-});
+// });
 
 
 Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admin.')->prefix('admin/')->group(function(){
+    
     Route::get('dashboard',[AdminController::class,'index'])->name('dashboard');
 
     /**
@@ -79,6 +90,7 @@ Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admi
      */
 
     Route::get('account',[AdminController::class,'account'])->name('account');// view admin.blade.php
+    Route::post('account/update',[UserController::class,'create'])->name('account.create');// view admin.blade.php
 
 
     /**
@@ -119,7 +131,7 @@ Route::middleware(['auth:web','preventBackHistory','administrator'])->name('admi
      * Excercises route
      * 
      */
-    Route::get('exercises/{rule}',[ExerciseController::class,'index'])->name('exercises');//view content.blade.php
+    Route::get('exercises',[ExerciseController::class,'index'])->name('exercises');//view content.blade.php
     Route::post('exercises/store',[ExerciseController::class,'create']);//view content.blade.php
     Route::get('exercises/list/{rule}',[ExerciseController::class,'list']);//view content.blade.php
     Route::get('exercises/edit/{exercise}',[ExerciseController::class,'edit']);//view content.blade.php

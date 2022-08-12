@@ -37,4 +37,24 @@ class ExerciseController extends Controller
         return $exercise->delete();
         
     }
+
+    public function quiz(){
+        return view('users.quiz');
+    }
+
+    public function getQuizList(Rule $rule){
+
+        return response()->json(
+
+            $rule->exercises
+
+        );
+
+    }
+
+    public function storeAnswer(Request $request){
+        return $request->all();
+    }
+
+
 }

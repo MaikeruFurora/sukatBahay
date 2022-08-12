@@ -7,7 +7,6 @@ use App\Models\ReviseYear;
 use App\Models\Rule;
 use App\Models\Section;
 use Illuminate\Http\Request;
-use PhpParser\Node\Stmt\Foreach_;
 
 class SearchController extends Controller
 {
@@ -75,21 +74,61 @@ class SearchController extends Controller
     }
 
     public function searchForce(Request $request){
-        
-          $result = Content::with(['section:id,rule_id,section_title,slug','section.rule:id,title,slug','reviseYear:id,year'])
+
+        $toBeSearch = explode(" ",str_replace(array("#",",",".","-","+",";","_"),"", strtolower($request->search)));
+
+        $preposition = array(
+
+            "to", "after", "against", "of",  "as", "from", "at", "athwart", "before","and",
+
+            "behind", "below","are","is", "but","into","after","since","up","under"
+
+        );
+
+        $finalListResult = array_values(array_diff($toBeSearch,$preposition));
+
+        $result = Content::with(['section:id,rule_id,section_title,slug','section.rule:id,title,slug','reviseYear:id,year'])
 
         ->select('content_text','id','revise_year_id','section_id')
 
-        ->where("content_text",'like','%'.$request->search.'%')
+        ->where(function($q) use ($finalListResult){
+
+            foreach ($finalListResult as $value) {
+
+                $q->orWhere("content_text",'like','%'.$value.'%');
+
+            }
+        })
 
         ->paginate(7);
 
+        if (count($finalListResult)>1) {
 
-        $condition = preg_replace('/[^A-Za-z0-9\- ]/', '', $request->search);
+            $keyword = $toBeSearch;
+            
+            foreach ($toBeSearch as $key => $value) {
+                
+                $condition = preg_replace('/[^A-Za-z0-9\- ]/', '', $value);
+                
+                $replace_string = '<span style="background:gray;color:white">'.$condition.'</span>';
+                
+            }
 
-        $replace_string = '<span style="background:gray;color:white">'.$condition.'</span>';
+        } else {
 
-        return view('users.search-force',compact('result','condition','replace_string'));
+            $keyword   = $request->search;
+
+            $condition = preg_replace('/[^A-Za-z0-9\- ]/', '', $keyword);
+
+            $replace_string = '<span style="background:gray;color:white">'.$condition.'</span>';
+            
+        }
+        
+
+        
+       
+
+        return view('users.search-force',compact('result','condition','replace_string','keyword'));
 
     }
 

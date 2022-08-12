@@ -33,14 +33,19 @@
                     </a>
                 </li>
                
-            <li class="menu-header ">Exercises</li>
-            @foreach ($rulesList as $item)
+            <li class="menu-header ">Quizzes</li>
+            <li class="{{ Request::segment(2)=='exercise' ? 'active' : '' }}">
+                <a href="{{ route('admin.exercises') }}" class="nav-link">
+                    <i class="fas fa-feather-alt"></i><span>Quizzes</span>
+                </a>
+            </li>
+            {{-- @foreach ($rulesList as $item)
             <li class="{{ (Request::segment(2)=='exercises' && Request::segment(3)==$item->id) ? 'active' : '' }}">
                 <a href="{{ route('admin.exercises',$item->id) }}" class="nav-link">
                     <i class="far fa-dot-circle"></i><span>{{ ucfirst(strtolower(explode("-",$item->title)[0])) }}</span>
                 </a>
             </li>     
-            @endforeach
+            @endforeach --}}
            
             <li>
                 <a class="nav-link text-danger" href="{{ route('auth.logout') }}"

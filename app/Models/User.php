@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'user_type',
+        'email_verified',
     ];
 
     /**
@@ -41,5 +42,27 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'email_verified' => 'boolean',
     ];
+
+
+    public function scopeStore(){
+
+        static::updateorcreate(['id'=>auth()->user()->id],[
+            
+            'fullname'=>request('fullname'),
+
+            'email'=>request('email'),
+
+        ]);
+        
+    }
+
+    public function bookmarks(){
+        
+        return $this->hasMany(Bookmark::class);
+        
+    }
+
+    
 }

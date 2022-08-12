@@ -46,11 +46,13 @@ class Content extends Model
 
         $result = $query->with(['section:id,rule_id,section_title,slug','section.rule:id,title,slug'])
 
-                        ->whereHas('section',function($query) use($keyword){
+                        // ->whereHas('section',function($query) use($keyword){
                             
-                            $query->where('section_title','like','%'.$keyword.'%');
+                        //     $query->where('section_title','like','%'.$keyword.'%');
                             
-                        })->when($keyword ?? false,function ($query,$keyword){
+                        // })
+
+                        ->when($keyword ?? false,function ($query,$keyword){
 
                              $query->where('content_text','like','%'.$keyword.'%');
                                             
@@ -60,9 +62,13 @@ class Content extends Model
 
         foreach($result as $key => $row){
 
+            $start =  strrpos(strtolower($row->content_text),$keyword);
+
+            $end   =  strlen($row->content_text);
+            
             $data[] = array(
 
-                'content'=>str_ireplace($condition, $replace_string, $row["content_text"]),
+                'content'=>str_ireplace($condition, $replace_string, substr($row["content_text"],$start,$end)),
 
                 'section'=>str_ireplace($condition, $replace_string, $row["section"]["section_title"]),
 
@@ -79,4 +85,18 @@ class Content extends Model
     return $data;
     
     }
+
+    public function bookmarks(){
+
+        return $this->hasMany(Bookmark::class);
+
+    }
+
+    public function bookmarkedBy(){
+
+        return $this->bookmarks->contains("user_id",auth()->user()->id);
+
+    }
+
+
 }

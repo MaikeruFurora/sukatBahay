@@ -25,22 +25,19 @@
                       <img  src="{{ asset($logo.'sb.png') }}" height="80" alt="">
                     </a>
                     {{-- <h2 class="display-6 text-center"><span style="color: #088441;">Sukat</span><span style="color: #FEAF2F;">Bahay</span></h2> --}}
-                    <h5 class="mb-4 mt-2 lead">Sign in</h5>
-                  </div>
-                  <form method="POST" action="{{ route('auth.login_post') }}">@csrf
+                    <h6 class="mb-4 mt-4 lead">Forgot Password</h6>
+                   </div>
+                  <form method="POST" action="{{ route('auth.forgot_post') }}">@csrf
                     <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label">Email address</label>
-                      <input type="email" name="email" class="form-control" id="exampleInputEmail1" value="{{ old("email") }}" aria-describedby="emailHelp">
+                     <input type="email" name="email" class="form-control" value="{{ old('email') }}" placeholder="Enter your Email address" >
+                     <span class="text-danger">@error('email'){{ $message }}@enderror</span>
                     </div>
-                    <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label">Password</label>
-                      <input type="password" name="password" class="form-control" id="exampleInputPassword1">
-                    </div>
+                  
                     <div class="d-grid gap-2 mx-auto mt-4 mb-2">
-                      <button class="btn btn-success" type="submit">Sign In</button>
+                      <button class="btn btn-success" type="submit">Submit</button>
                     </div>
-                    <small>Don't have an account? <a href="{{ route('auth.register') }}">Register</a></small> |
-                     <small><a href="{{ route('auth.forgot') }}">Forgot Password</a>?</small>
+                    <small>Already have an account? <a href="{{ route('auth.login') }}">Sign In</a></small>
+                   
                   </form>
                 </div>
               </div>

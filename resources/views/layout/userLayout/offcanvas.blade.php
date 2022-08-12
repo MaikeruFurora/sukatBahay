@@ -6,27 +6,22 @@
   </div>
   <div class="offcanvas-body">
     <ol class="list-group list-group-numbered">
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div class="ms-2 me-auto">
-            <div class="fw-bold">Subheading</div>
-            Content for list item
-          </div>
-          <span class="badge bg-primary rounded-pill">14</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div class="ms-2 me-auto">
-            <div class="fw-bold">Subheading</div>
-            Content for list item
-          </div>
-          <span class="badge bg-primary rounded-pill">14</span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-          <div class="ms-2 me-auto">
-            <div class="fw-bold">Subheading</div>
-            Content for list item
-          </div>
-          <span class="badge bg-primary rounded-pill">14</span>
-        </li>
+      @forelse (auth()->user()->load('bookmarks')->bookmarks as $value)
+      <a class="text-decoration-none" href="{{ url("rule-content/".$value->content->section->rule->slug."/".$value->content->section->slug) }}">
+      <li class="list-group-item d-flex justify-content-between align-items-start pb-0">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold" style="font-size: 13px">{{ $value->content->section->section_title }}</div>
+          <p style="font-size: 11px;">
+            {{ mb_strimwidth($value->content->content_text,0,((strlen($value->content->content_text)/2)/2),' ...') }}
+          </p>
+        </div>
+        <span class="badge bg-success rounded-pill pt-1 pb-1" style="font-size: 10px">Read more</span>
+      </li>
+      </a>
+      @empty
+        <small>No bookmark</small>
+      @endforelse
+       
       </ol>
   </div>
 </div>

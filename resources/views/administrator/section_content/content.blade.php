@@ -12,7 +12,7 @@
             {{ $rule->title }} / {{ $data->section_title }} / Content
         </p>
        <div class="row">
-            <div class="col-lg-7 col-md-7 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ $data->section_title }}</h4>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-5 col-sm-12">
+            <div class="col-lg-6 col-md-6 col-sm-12">
               <!-- Modal -->
               
               <div class="card">
@@ -88,6 +88,9 @@
     <script>
         "use strict"
         $('.summernote').summernote({
+          fontNames: ['Poppins-Regular','Poppins-Light','Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+          dialogsInBody: true,
+          minHeight: 250,
           height: ($(window).height() - 700),
             callbacks: {
                 onPaste: function (e) {

@@ -27,7 +27,7 @@ class RedirectIfAuthenticated
                     if (auth()->user()->user_type=="yes") {
                         return redirect()->route('admin.dashboard');
                     } else {
-                        //return redirect()->route('cover');
+                        return redirect()->route('welcome');
                     }
                 } else {
                     if (Auth::guard('web')->check()) {

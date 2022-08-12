@@ -13,74 +13,61 @@
     <div class="section-body">
       <h2 class="section-title">Account</h2>
       <div class="row">
-        <div class="col-lg-8 col-md-8 col-sm-12">
-            
-            @include('administrator.account.revise_year')
-              <div class="card">
-                <div class="card-header">
-                  <h4>Settings</h4>
-                </div>
-                  <div class="card-body">
-                    <ul class="list-group">
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Exercises > random question
-                        <span class="badge badge-primary badge-pill">14</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Dapibus ac facilisis in
-                        <span class="badge badge-primary badge-pill">2</span>
-                      </li>
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Morbi leo risus
-                        <span class="badge badge-primary badge-pill">1</span>
-                      </li>
-                    </ul>
+        <div class="col-lg-12 col-md-8 col-sm-12 col-12">
+          @include('administrator.account.revise_year')
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+          @if (session()->has('msg'))
+            <div class="alert alert-primary" role="alert">
+                {{ session()->get('msg') }}
+            </div>
+          @endif
+          <div class="card">
+            <div class="card-header">
+              <h4>Profile</h4>
+            </div>
+              <div class="card-body">
+                <form id="formProfile" method="POST" action="{{ route('admin.account.create') }}">@csrf
+                  <div class="form-group">
+                    <label for="">Fullname</label>
+                    <input type="text" class="form-control" name="fullname" value="{{ auth()->user()->fullname }}" disabled>
+                  </div>  
+                  <div class="form-group">
+                    <label for="">Email address</label>
+                    <input type="email" class="form-control" name="email" value="{{ auth()->user()->email }}" disabled>
                   </div>
+                    <button type="submit" class="btn btn-primary" disabled>Save</button>
+                    <button type="button" class="btn btn-secondary btnEdit">Edit Profile</button>
+                  </form>
               </div>
-          </div>
-          <div class="col-lg-4 col-md-4 col-sm-12">
-              <div class="card">
-                <div class="card-header">
-                  <h4>Profile</h4>
-                </div>
-                  <div class="card-body">
-                    <form id="formProfile">
-                      <div class="form-group">
-                        <label for="">Fullname</label>
-                        <input type="text" class="form-control" id="" value="{{ auth()->user()->fullname }}" disabled>
-                      </div>  
-                      <div class="form-group">
-                        <label for="">Email address</label>
-                        <input type="email" class="form-control" id="" value="{{ auth()->user()->email }}" disabled>
-                      </div>
-                        <button type="submit" class="btn btn-primary" disabled>Save</button>
-                        <button type="button" class="btn btn-secondary btnEdit">Edit Profile</button>
-                      </form>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm 12 col-12">
+          <div class="card">
+            <div class="card-header">
+              <h4>Change Password</h4>
+            </div>
+            <div class="card-body">
+              <form>
+                  <div class="form-group">
+                    <label for="">Old Password</label>
+                    <input type="password" class="form-control" id="">
                   </div>
-              </div>
-              <div class="card">
-                <div class="card-header">
-                  <h4>Change Password</h4>
-                </div>
-                <div class="card-body">
-                  <form>
-                      <div class="form-group">
-                        <label for="">Old Password</label>
-                        <input type="password" class="form-control" id="">
-                      </div>
-                      <div class="form-group">
-                        <label for="">New Password</label>
-                        <input type="password" class="form-control" id="">
-                      </div>
-                      <div class="form-group">
-                        <label for="">Confirm Password</label>
-                        <input type="password" class="form-control" id="">
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-                </div>
-              </div>
+                  <div class="form-group">
+                    <label for="">New Password</label>
+                    <input type="password" class="form-control" id="">
+                  </div>
+                  <div class="form-group">
+                    <label for="">Confirm Password</label>
+                    <input type="password" class="form-control" id="">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
           </div>
+        </div>
       </div>
     </div>
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRecentSearchesTable extends Migration
+class CreateVerifyUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class CreateRecentSearchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('recent_searches', function (Blueprint $table) {
-            $table->id();
+        Schema::create('verify_users', function (Blueprint $table) {
+            $table->integer('user_id');
+            $table->text('token');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateRecentSearchesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recent_searches');
+        Schema::dropIfExists('verify_users');
     }
 }

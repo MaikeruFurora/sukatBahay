@@ -20,7 +20,16 @@
 
 body {
     font-family: 'Poppins-Regular', sans-serif;
-    background: #F5F5F5
+    background: #EDFFF7;
+    user-select: none;
+}
+
+.has-user-select {
+    user-select: text;
+}
+
+.no-user-select {
+    user-select: none;
 }
 
 .navbar-light {
@@ -31,35 +40,66 @@ body {
     font-family: 'Poppins-Light', sans-serif;
 }
 
-
-/* ============ desktop view ============ */
-
-.add-padding {
-    /* padding: .25rem 1.1rem !important; */
+.navbar-nav li:hover>ul.dropdown-menu {
+    display: block;
 }
 
-.drop-down02 {
-    color: black;
+.dropdown-submenu {
     position: relative;
 }
 
-.drop-down02 .sub-menu02 {
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    /*left:-100%;*/
+    left: 100%;
+    /* 10rem is the min-width of dropdown-menu */
+    margin-top: -6px;
+}
+
+
+/* rotate caret on hover */
+
+.dropdown-menu>li>a:hover:after {
+    text-decoration: underline;
+    transform: rotate(-90deg);
+}
+
+
+/* ============ desktop view ============ */
+
+
+/* .add-padding {
+    /* padding: .25rem 1.1rem !important; */
+
+
+/* } */
+
+
+/* .drop-down02 {
+    color: black;
+    position: relative;
+} */
+
+
+/* .drop-down02 .sub-menu02 {
     color: black;
     position: absolute !important;
     left: 100%;
     top: 0;
-}
+} */
 
-.drop-down02 .dropdown-toggle {
+
+/* .drop-down02 .dropdown-toggle {
     color: black;
     padding: .20rem 1.1rem !important;
-}
+} */
 
-@media screen and (max-width :767px) {
+
+/* @media screen and (max-width :767px) {
     .drop-down02 .sub-menu02 {
         position: static !important;
     }
-}
+} */
 
 
 /* ============ desktop view .end// ============ */
@@ -67,13 +107,14 @@ body {
 
 /* ============ small devices ============ */
 
-@media (max-width: 991px) {
+
+/* @media (max-width: 991px) {
     .dropdown-menu .dropdown-menu {
         margin-left: 0.7rem;
         margin-right: 0.7rem;
         margin-bottom: .5rem;
     }
-}
+} */
 
 
 /* ============ small devices .end// ============ */
@@ -97,10 +138,11 @@ font-weight: 300 */
 
 .search {
     position: relative;
-    box-shadow: 0 0 40px rgba(51, 51, 51, .1)
+    /* box-shadow: 0 0 40px rgba(51, 51, 51, .1) */
 }
 
 .search input {
+    border-radius: 25px;
     height: 60px;
     text-indent: 25px;
     border: 2px solid #d6d4d4
@@ -108,7 +150,7 @@ font-weight: 300 */
 
 .search input:focus {
     box-shadow: none;
-    border: 2px solid #004d39
+    border: 2px solid #37B47E
 }
 
 .search .fa-search {
@@ -123,17 +165,142 @@ font-weight: 300 */
     right: 5px;
     height: 50px;
     width: 110px;
-    background: #004d39
+    border-radius: 25px;
+    background: #37B47E;
+    color: white
 }
 
 .dropdown-item {
     overflow: auto;
     color: black;
-    width: 400px;
-    white-space: normal;
 }
 
 .new-active {
     color: white;
-    background: #d6d4d4
+    background: black
+}
+
+.di-width {
+    font-family: 'Poppins-Light', sans-serif;
+    padding: 12px;
+    width: 400px;
+    white-space: normal;
+}
+
+.sub-active {
+    font-weight: bold;
+}
+
+
+/* MODIFIED SEARCH AND BUTTON  */
+
+.search .input-modified {
+    border-radius: 25px;
+    height: 50px;
+    text-indent: 25px;
+    border: 2px solid #d6d4d4
+}
+
+.search .btn-modified {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 40px;
+    width: 110px;
+    border-radius: 25px;
+    background: #37B47E;
+}
+
+.navbar-green {
+    color: white;
+    background: #37B47E
+}
+
+.navbar-green .navbar-brand {
+    color: #fff
+}
+
+.navbar-green .navbar-brand:focus,
+.navbar-green .navbar-brand:hover {
+    color: #fff
+}
+
+.navbar-green .navbar-nav .nav-link {
+    color: #fff
+}
+
+.navbar-green .navbar-nav .nav-link:focus,
+.navbar-green .navbar-nav .nav-link:hover {
+    color: rgba(255, 255, 255, .75)
+}
+
+.navbar-green .navbar-nav .nav-link.disabled {
+    color: rgba(255, 255, 255, .25)
+}
+
+.navbar-green .navbar-nav .nav-link.active,
+.navbar-green .navbar-nav .show>.nav-link {
+    color: #fff
+}
+
+.navbar-green .navbar-toggler {
+    color: #fff;
+    border-color: rgba(255, 255, 255, .1)
+}
+
+.navbar-green .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")
+}
+
+.navbar-green .navbar-text {
+    color: #fff
+}
+
+.navbar-green .navbar-text a,
+.navbar-green .navbar-text a:focus,
+.navbar-green .navbar-text a:hover {
+    color: #fff
+}
+
+
+/*  floating highlightext menu style*/
+
+#control {
+    cursor: pointer;
+    position: absolute;
+    width: 120px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: black;
+}
+
+#control::before {
+    position: absolute;
+    content: '';
+    border-top: 10px solid black;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    left: 50px;
+    top: 40px;
+}
+
+#control b {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 70%;
+}
+
+#tweet {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/ce/Twitter_Logo.png');
+}
+
+#telegram {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg');
+}
+
+#whatsapp {
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/c/cc/WhatsApp_Logo.svg');
 }

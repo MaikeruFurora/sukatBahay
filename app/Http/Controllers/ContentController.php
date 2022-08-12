@@ -43,11 +43,11 @@ class ContentController extends Controller
 
                                if (empty($year)) {
 
-                               $q->whereNull('revise_year_id');
+                                    $q->whereNull('revise_year_id');
 
                                }else{
 
-                                   $q->where('revise_year_id',$year);
+                                    $q->where('revise_year_id',$year);
 
                                }
 

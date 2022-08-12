@@ -51,4 +51,6 @@ class Rule extends Model
 //     return $this->hasManyThrough(Content::class,Section::class);
 // }
 
+    
+
 }

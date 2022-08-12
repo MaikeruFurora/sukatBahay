@@ -5,12 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Rule;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     public function index(){
 
-        return view('administrator/dashboard/dashboard');
+        $userCount = User::where("user_type","no")->where("email_verified",1)->count();
+        $userNotVerified = User::where("user_type","no")->where("email_verified",0)->count();
+        $ruleCount = Rule::count();
+
+        // return User::select(DB::raw("MONTH(created_at) month"),DB::raw("COUNT(created_at) as total"))->where("user_type","no")->groupBy("month")->get();
+
+        return view('administrator/dashboard/dashboard',[
+            'userCount' => $userCount ?? 0,
+            'userNotVerified' => $userNotVerified ?? 0,
+            'ruleCount' => $ruleCount ?? 0,
+        ]);
 
     }
 
@@ -125,5 +136,6 @@ class AdminController extends Controller
      public function account(){
          return view('administrator/account/account');
      }
+
 
 }

@@ -17,6 +17,7 @@ class Section extends Model
     }
 
     public function scopeStore($query){
+        
         return $query->updateorcreate(['id'=>request('id')],[
             'section_no'=>request('section_no'),
             'slug'=>$this->makeSlug(request('section_title')),
@@ -37,5 +38,11 @@ class Section extends Model
             return Str::slug($value);   
         }
     }
+
+    protected $casts = [
+        
+        'section_no'=>'integer',
+        
+    ];
 
 }

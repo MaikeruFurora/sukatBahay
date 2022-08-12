@@ -1,13 +1,16 @@
 @extends('layout.userLayout.app')
 @section('content')
 <div class="container">
-    <div class="row height d-flex justify-content-center align-items-center">
+    <div class="row height mt-5 d-flex justify-content-center align-items-center">
         <div class="col-md-8">
-            <div class="text-center">
-                <h1 class="display-1 text-center my-5 welcome-title">Sukat <span style="color: #004d39;">Bahay</span></h1>
+            <div class="row justify-content-center align-items-center">
+                <div class="col-8 my-5 animate__animated animate__bounceIn">
+                    {{-- <h1 class="display-1 text-center my-5 welcome-title">Sukat Bahay</h1> --}}
+                    <img  src="{{ asset($logo.'sb.png') }}" class="img-fluid" height="100" alt="">
+                </div>
             </div>
             <form action="{{ route('search.force') }}" method="GET">
-                <div class="search"> <i class="fa fa-search"></i> <input type="text" name="search" class="form-control" placeholder="Have a question? Ask Now" required> <button class="btn btn-primary">Search</button> </div>
+                <div class="search"> <i class="fa fa-search"></i> <input type="text" name="search" class="form-control" placeholder="Search" required> <button class="btn">Search</button> </div>
             </form>
             <span id="search_result"></span>
         </div>
@@ -17,9 +20,12 @@
 @section('js')
     <script>
         $("input[name='search']").on('keyup',function(){
-            let _html = `<div class="list-group">`;
+            let _html = `<div class="list-group" style="border-radius:20px;">`;
             let q = $(this).val();
             if (parseInt(q.length)>=4) {
+                $(".img-fluid").
+                addClass('animate__animated animate__bounceOut')
+                .removeClass('animate__animated animate__bounceIn').hide()
                 $.ajax({
                     url:`search/auto-suggest`,
                     type:'GET',
@@ -47,7 +53,12 @@
                 })
             }else{
                 $("#search_result").html('')
-                // recent_search
+                if (parseInt(q.length)==0) {
+                    $(".img-fluid")
+                        .removeClass('animate__animated animate__bounceOut')
+                        .addClass('animate__animated animate__bounceIn')
+                        .show().fadeIn(2000)
+                }
             }
         })
 
@@ -67,7 +78,7 @@
             let len = value.content.length
 
             return value.section
-            +'<br>&nbsp;<i class="fas fa-search"></i>&nbsp;'+value.content.substr(ranges(0,pos-4),ranges(pos,len))+' ...';
+            +'<br>&nbsp;<i class="fas fa-search"></i>&nbsp;'+value.content.substr(0,100)+' ...';
         }
         const  ranges = (start, end) => {
             /* generate a range : [start, start+1, ..., end-1, end] */
@@ -77,7 +88,7 @@
             for (let i = 0; i < len; i++) a[i] = start + i;
             console.log(a);
 
-            while (parseInt(a.length+1)>=20) {    
+            while (parseInt(a.length+1)>=50) {    
                 return (a.length%2!=1)?(a.length-1):(a.length/2)
             }
 
